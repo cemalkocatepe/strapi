@@ -6,7 +6,8 @@ type SettingsPermissions =
   | 'roles'
   | 'transfer-tokens'
   | 'users'
-  | 'webhooks';
+  | 'webhooks'
+  | 'role-groups';
 
 type EESettingsPermissions = 'auditLogs' | 'review-workflows' | 'sso' | 'releases';
 
