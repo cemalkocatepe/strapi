@@ -22,13 +22,11 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          cd packages/core/admin
           yarn install
 
       - name: Build Project
         run: |
-          cd packages/core/admin
-          yarn run build
+          yarn run setup
 
       - name: Publish to NPM
         run: |
