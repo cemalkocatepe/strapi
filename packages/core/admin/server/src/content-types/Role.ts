@@ -53,5 +53,12 @@ export default {
       mappedBy: 'role',
       target: 'admin::permission',
     },
+    role_groups: {
+      configurable: false,
+      type: 'relation',
+      relation: 'manyToOne',
+      target: 'admin::role-group',
+      inversedBy: 'roles',
+    },
   },
 };
