@@ -45,19 +45,30 @@ export type AdminUserUpdatePayload = Omit<AdminUser, keyof Entity | 'roles'> & {
 
 export type SanitizedAdminUser = Omit<AdminUser, 'password' | 'resetPasswordToken' | 'roles'> & {
   roles: SanitizedAdminRole[];
+  role_groups: SanitizedAdminRoleGroup;
 };
+
 export interface AdminRole extends Entity {
   name: string;
   code: string;
   description?: string;
   users: AdminUser[];
   permissions: Permission[];
+  role_groups: AdminRoleGroup;
+}
+
+export interface AdminRoleGroup extends Entity {
+  name: string;
+  code: string;
+  description?: string;
 }
 
 export type SanitizedAdminRole = Omit<
   AdminRole,
-  'users' | 'permissions' | 'createdAt' | 'updatedAt'
+  'users' | 'permissions' | 'role_groups' | 'createdAt' | 'updatedAt'
 >;
+
+export type SanitizedAdminRoleGroup = Omit<AdminRoleGroup, 'createdAt' | 'updatedAt'>;
 
 export interface Pagination {
   page: number;

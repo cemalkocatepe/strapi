@@ -1,6 +1,7 @@
 import Permission from './Permission';
 import User from './User';
 import Role from './Role';
+import RoleGroup from './RoleGroup';
 import apiToken from './api-token';
 import apiTokenPermission from './api-token-permission';
 import transferToken from './transfer-token';
@@ -10,6 +11,7 @@ export default {
   permission: { schema: Permission },
   user: { schema: User },
   role: { schema: Role },
+  'role-group': { schema: RoleGroup },
   'api-token': { schema: apiToken },
   'api-token-permission': { schema: apiTokenPermission },
   'transfer-token': { schema: transferToken },

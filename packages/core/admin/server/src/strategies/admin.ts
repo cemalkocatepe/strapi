@@ -22,9 +22,10 @@ export const authenticate = async (ctx: Context) => {
     return { authenticated: false };
   }
 
-  const user = await strapi.db
-    .query('admin::user')
-    .findOne({ where: { id: payload.id }, populate: ['roles'] });
+  const user = await strapi.db.query('admin::user').findOne({
+    where: { id: payload.id },
+    populate: { roles: { populate: { role_groups: true } } },
+  });
 
   if (!user || !(user.isActive === true)) {
     return { authenticated: false };

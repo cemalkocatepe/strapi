@@ -11,6 +11,8 @@ import type {
   SanitizedAdminUser,
   SanitizedAdminRole,
   AdminUserUpdatePayload,
+  AdminRoleGroup,
+  SanitizedAdminRoleGroup,
   // eslint-disable-next-line node/no-unpublished-import
 } from '../../../shared/contracts/shared';
 import { password as passwordValidator } from '../validation/common-validators';
@@ -23,14 +25,19 @@ const { ValidationError } = errors;
 const sanitizeUserRoles = (role: AdminRole): SanitizedAdminRole =>
   _.pick(role, ['id', 'name', 'description', 'code']);
 
+const sanitizeUserRoleGroups = (role_group: AdminRoleGroup): SanitizedAdminRoleGroup =>
+  _.pick(role_group, ['id', 'name', 'description', 'code']);
+
 /**
  * Remove private user fields
  * @param  user - user to sanitize
  */
 const sanitizeUser = (user: AdminUser): SanitizedAdminUser => {
+  const roleGroup = user.roles && _.first(user.roles)?.role_groups;
   return {
     ..._.omit(user, ['password', 'resetPasswordToken', 'registrationToken', 'roles']),
     roles: user.roles && user.roles.map(sanitizeUserRoles),
+    role_groups: sanitizeUserRoleGroups(roleGroup!),
   };
 };
 
