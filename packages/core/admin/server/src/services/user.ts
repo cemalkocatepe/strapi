@@ -23,7 +23,7 @@ const { SUPER_ADMIN_CODE } = constants;
 
 const { ValidationError } = errors;
 const sanitizeUserRoles = (role: AdminRole): SanitizedAdminRole =>
-  _.pick(role, ['id', 'name', 'description', 'code']);
+  _.pick(role, ['id', 'name', 'description', 'code', 'role_groups']);
 
 const sanitizeUserRoleGroups = (role_group: AdminRoleGroup): SanitizedAdminRoleGroup =>
   _.pick(role_group, ['id', 'name', 'description', 'code']);
