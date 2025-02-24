@@ -47,7 +47,7 @@ export default {
    */
   async findOne(ctx: Context) {
     const { id } = ctx.params as FindRole.Request['params'];
-    const role = await getService('role').findOneWithUsersCount({ id });
+    const role = await getService('role').findOneWithUsersCount({ id }, { role_groups: true });
 
     if (!role) {
       return ctx.notFound('role.notFound');

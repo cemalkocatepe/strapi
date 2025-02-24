@@ -14,6 +14,7 @@ import * as apiToken from './api-token';
 import * as transfer from './transfer';
 import * as projectSettings from './project-settings';
 import { createHomepageService } from './homepage';
+import roleGroup from './role-group';
 
 // TODO: TS - Export services one by one as this export is cjs
 export default {
@@ -32,4 +33,5 @@ export default {
   transfer,
   'project-settings': projectSettings,
   homepage: createHomepageService,
+  'role-group': roleGroup,
 };

@@ -41,18 +41,6 @@ export const ADMIN_PERMISSIONS_CE = {
       read: [{ action: 'admin::roles.read', subject: null }],
       update: [{ action: 'admin::roles.update', subject: null }],
     },
-    'role-groups': {
-      main: [
-        { action: 'admin::role-groups.create', subject: null },
-        { action: 'admin::role-groups.update', subject: null },
-        { action: 'admin::role-groups.read', subject: null },
-        { action: 'admin::role-groups.delete', subject: null },
-      ],
-      create: [{ action: 'admin::role-groups.create', subject: null }],
-      delete: [{ action: 'admin::role-groups.delete', subject: null }],
-      read: [{ action: 'admin::role-groups.read', subject: null }],
-      update: [{ action: 'admin::role-groups.update', subject: null }],
-    },
     users: {
       main: [
         { action: 'admin::users.create', subject: null },
@@ -205,11 +193,6 @@ export const SETTINGS_LINKS_CE = (): SettingsMenu => ({
   ],
 
   admin: [
-    {
-      intlLabel: { id: 'global.role-groups', defaultMessage: 'Role Groups' },
-      to: '/settings/role-groups',
-      id: 'role-groups',
-    },
     {
       intlLabel: { id: 'global.roles', defaultMessage: 'Roles' },
       to: '/settings/roles',

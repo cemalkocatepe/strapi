@@ -10,6 +10,8 @@ import {
   Textarea,
   TextInput,
   Typography,
+  SingleSelect,
+  SingleSelectOption,
 } from '@strapi/design-system';
 import { Check } from '@strapi/icons';
 import { format } from 'date-fns';
@@ -28,6 +30,7 @@ import { useTracking } from '../../../../features/Tracking';
 import { useAPIErrorHandler } from '../../../../hooks/useAPIErrorHandler';
 import {
   useCreateRoleMutation,
+  useGetRoleGroupsQuery,
   useGetRolePermissionLayoutQuery,
   useGetRolePermissionsQuery,
   useUpdateRolePermissionsMutation,
@@ -44,6 +47,7 @@ import { Permissions, PermissionsAPI } from './components/Permissions';
 const CREATE_SCHEMA = yup.object().shape({
   name: yup.string().required(translatedErrors.required.id),
   description: yup.string().required(translatedErrors.required.id),
+  role_groups: yup.string().required(translatedErrors.required.id),
 });
 
 /**
@@ -52,6 +56,7 @@ const CREATE_SCHEMA = yup.object().shape({
 interface CreateRoleFormValues {
   name: string;
   description: string;
+  role_groups: string;
 }
 
 /**
@@ -91,6 +96,11 @@ const CreatePage = () => {
       skip: !id,
       refetchOnMountOrArgChange: true,
     }
+  );
+
+  const { currentData: roleGroups, isLoading: isLoadingRoleGroup } = useGetRoleGroupsQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
   );
 
   const [createRole] = useCreateRoleMutation();
@@ -158,7 +168,7 @@ const CreatePage = () => {
     }
   };
 
-  if ((isLoadingPermissionsLayout && isLoadingRole) || !permissionsLayout) {
+  if ((isLoadingPermissionsLayout && isLoadingRole && isLoadingRoleGroup) || !permissionsLayout) {
     return <Page.Loading />;
   }
 
@@ -176,6 +186,7 @@ const CreatePage = () => {
         initialValues={
           {
             name: '',
+            role_groups: '',
             description: `${formatMessage({
               id: 'Settings.roles.form.created',
               defaultMessage: 'Created',
@@ -184,7 +195,7 @@ const CreatePage = () => {
         }
         onSubmit={handleCreateRoleSubmit}
         validationSchema={CREATE_SCHEMA}
-        validateOnChange={false}
+        validateOnChange={true}
       >
         {({ values, errors, handleReset, handleChange, isSubmitting }) => (
           <Form>
@@ -274,6 +285,33 @@ const CreatePage = () => {
                           </Field.Root>
                         </Grid.Item>
                         <Grid.Item col={6} direction="column" alignItems="stretch">
+                          <Field.Root
+                            name="role_group"
+                            error={errors.role_groups && formatMessage({ id: errors.role_groups })}
+                            required
+                          >
+                            <Field.Label>
+                              {formatMessage({
+                                id: 'global.role-groups',
+                                defaultMessage: 'Role Group',
+                              })}
+                            </Field.Label>
+                            <SingleSelect
+                              onChange={(value) => {
+                                handleChange({ target: { name: 'role_groups', value } });
+                              }}
+                              value={values.role_groups}
+                            >
+                              {roleGroups?.map((item) => (
+                                <SingleSelectOption key={item.id} value={item.id}>
+                                  {item.name} - [{item.code}]
+                                </SingleSelectOption>
+                              ))}
+                            </SingleSelect>
+                            <Field.Error />
+                          </Field.Root>
+                        </Grid.Item>
+                        <Grid.Item col={12} direction="column" alignItems="stretch">
                           <Field.Root
                             name="description"
                             error={errors.description && formatMessage({ id: errors.description })}

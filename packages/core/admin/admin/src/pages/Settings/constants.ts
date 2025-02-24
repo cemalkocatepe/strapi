@@ -3,36 +3,6 @@ import type { RouteObject } from 'react-router-dom';
 export const ROUTES_CE: RouteObject[] = [
   {
     lazy: async () => {
-      const { ProtectedListPage } = await import('./pages/RoleGroups/ListPage');
-
-      return {
-        Component: ProtectedListPage,
-      };
-    },
-    path: 'role-groups',
-  },
-  {
-    lazy: async () => {
-      const { ProtectedCreatePage } = await import('./pages/RoleGroups/CreatePage');
-
-      return {
-        Component: ProtectedCreatePage,
-      };
-    },
-    path: 'role-groups/new',
-  },
-  {
-    lazy: async () => {
-      const { ProtectedEditPage } = await import('./pages/RoleGroups/EditPage');
-
-      return {
-        Component: ProtectedEditPage,
-      };
-    },
-    path: 'role-groups/:id',
-  },
-  {
-    lazy: async () => {
       const { ProtectedListPage } = await import('./pages/Roles/ListPage');
 
       return {

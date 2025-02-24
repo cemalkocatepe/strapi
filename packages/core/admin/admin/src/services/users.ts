@@ -1,4 +1,5 @@
 import * as Permissions from '../../../shared/contracts/permissions';
+import * as RoleGroups from '../../../shared/contracts/role-groups';
 import * as Roles from '../../../shared/contracts/roles';
 import * as Users from '../../../shared/contracts/user';
 
@@ -8,7 +9,7 @@ import type { Data } from '@strapi/types';
 
 const usersService = adminApi
   .enhanceEndpoints({
-    addTagTypes: ['LicenseLimits', 'User', 'Role', 'RolePermissions'],
+    addTagTypes: ['LicenseLimits', 'User', 'Role', 'RolePermissions', 'RoleGroup'],
   })
   .injectEndpoints({
     endpoints: (builder) => ({
@@ -191,6 +192,43 @@ const usersService = adminApi
         }),
         transformResponse: (res: Permissions.GetAll.Response) => res.data,
       }),
+      getRoleGroups: builder.query<
+        RoleGroups.FindRoleGroups.Response['data'],
+        GetRoleGroupsParams | void
+      >({
+        query: ({ id, ...params } = {}) => ({
+          url: `/admin/role-groups/${id ?? ''}`,
+          method: 'GET',
+          config: {
+            params,
+          },
+        }),
+        transformResponse: (
+          res: RoleGroups.FindRoleGroup.Response | RoleGroups.FindRoleGroups.Response
+        ) => {
+          let roleGroups: RoleGroups.FindRoleGroups.Response['data'] = [];
+
+          if (res.data) {
+            if (Array.isArray(res.data)) {
+              roleGroups = res.data;
+            } else {
+              roleGroups = [res.data];
+            }
+          }
+
+          return roleGroups;
+        },
+        providesTags: (res, _err, arg) => {
+          if (typeof arg === 'object' && 'id' in arg) {
+            return [{ type: 'RoleGroup' as const, id: arg.id }];
+          } else {
+            return [
+              ...(res?.map(({ id }) => ({ type: 'RoleGroup' as const, id })) ?? []),
+              { type: 'RoleGroup' as const, id: 'LIST' },
+            ];
+          }
+        },
+      }),
     }),
     overrideExisting: false,
   });
@@ -202,6 +240,9 @@ type GetUsersParams =
 type GetRolesParams =
   | Roles.FindRole.Request['params']
   | (Roles.FindRoles.Request['query'] & { id?: never });
+type GetRoleGroupsParams =
+  | RoleGroups.FindRoleGroup.Request['params']
+  | (RoleGroups.FindRoleGroups.Request['query'] & { id?: never });
 interface GetRolePermissionsParams {
   id: Data.ID;
 }
@@ -212,6 +253,7 @@ const {
   useUpdateUserMutation,
   useDeleteManyUsersMutation,
   useGetRolesQuery,
+  useGetRoleGroupsQuery,
   useCreateRoleMutation,
   useUpdateRoleMutation,
   useGetRolePermissionsQuery,
@@ -224,6 +266,7 @@ const useAdminUsers = useGetUsersQuery;
 export {
   useUpdateUserMutation,
   useGetRolesQuery,
+  useGetRoleGroupsQuery,
   useAdminUsers,
   useDeleteManyUsersMutation,
   useCreateUserMutation,
