@@ -111,46 +111,6 @@ export const actions = [
     category: 'users and roles',
     subCategory: 'roles',
   },
-
-  {
-    uid: 'role-groups.create',
-    displayName: 'Create',
-    pluginName: 'admin',
-    section: 'settings',
-    category: 'users and roles',
-    subCategory: 'role-groups',
-  },
-  {
-    uid: 'role-groups.read',
-    displayName: 'Read',
-    pluginName: 'admin',
-    section: 'settings',
-    category: 'users and roles',
-    subCategory: 'role-groups',
-    aliases: [
-      {
-        actionId: 'plugin::content-manager.explorer.read',
-        subjects: ['admin::role-group'],
-      },
-    ],
-  },
-  {
-    uid: 'role-groups.update',
-    displayName: 'Update',
-    pluginName: 'admin',
-    section: 'settings',
-    category: 'users and roles',
-    subCategory: 'role-groups',
-  },
-  {
-    uid: 'role-groups.delete',
-    displayName: 'Delete',
-    pluginName: 'admin',
-    section: 'settings',
-    category: 'users and roles',
-    subCategory: 'role-groups',
-  },
-
   {
     uid: 'api-tokens.access',
     displayName: 'Access the API tokens settings page',

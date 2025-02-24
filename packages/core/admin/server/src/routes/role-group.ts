@@ -4,10 +4,7 @@ export default [
     path: '/role-groups/:id',
     handler: 'role-group.findOne',
     config: {
-      policies: [
-        'admin::isAuthenticatedAdmin',
-        { name: 'admin::hasPermissions', config: { actions: ['admin::role-groups.read'] } },
-      ],
+      policies: ['admin::isAuthenticatedAdmin'],
     },
   },
   {
@@ -15,10 +12,7 @@ export default [
     path: '/role-groups',
     handler: 'role-group.findAll',
     config: {
-      policies: [
-        'admin::isAuthenticatedAdmin',
-        { name: 'admin::hasPermissions', config: { actions: ['admin::role-groups.read'] } },
-      ],
+      policies: ['admin::isAuthenticatedAdmin'],
     },
   },
 ];
