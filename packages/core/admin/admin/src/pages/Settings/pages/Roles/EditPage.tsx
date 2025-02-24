@@ -16,6 +16,7 @@ import { useTracking } from '../../../../features/Tracking';
 import { useAdminRoles } from '../../../../hooks/useAdminRoles';
 import { useAPIErrorHandler } from '../../../../hooks/useAPIErrorHandler';
 import {
+  useGetRoleGroupsQuery,
   useGetRolePermissionLayoutQuery,
   useGetRolePermissionsQuery,
   useUpdateRoleMutation,
@@ -30,6 +31,7 @@ import { RoleForm } from './components/RoleForm';
 const EDIT_ROLE_SCHEMA = yup.object().shape({
   name: yup.string().required(translatedErrors.required.id),
   description: yup.string().optional(),
+  role_groups: yup.string().required(translatedErrors.required.id),
 });
 
 /**
@@ -38,6 +40,7 @@ const EDIT_ROLE_SCHEMA = yup.object().shape({
 interface EditRoleFormValues {
   name: string;
   description: string;
+  role_groups: string;
 }
 
 const EditPage = () => {
@@ -82,6 +85,11 @@ const EditPage = () => {
       skip: !id,
       refetchOnMountOrArgChange: true,
     }
+  );
+
+  const { currentData: roleGroups, isLoading: isLoadingRoleGroup } = useGetRoleGroupsQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
   );
 
   const [updateRole] = useUpdateRoleMutation();
@@ -159,7 +167,14 @@ const EditPage = () => {
 
   const isFormDisabled = !isRoleLoading && role.code === 'strapi-super-admin';
 
-  if (isLoadingPermissionsLayout || isRoleLoading || isLoadingPermissions || !permissionsLayout) {
+  if (
+    isLoadingPermissionsLayout ||
+    isRoleLoading ||
+    isLoadingPermissions ||
+    !permissionsLayout ||
+    !roleGroups ||
+    isLoadingRoleGroup
+  ) {
     return <Page.Loading />;
   }
 
@@ -178,6 +193,7 @@ const EditPage = () => {
         initialValues={
           {
             name: role.name ?? '',
+            role_groups: String(role.role_groups?.id) ?? '',
             description: role.description ?? '',
           } satisfies EditRoleFormValues
         }
@@ -222,6 +238,7 @@ const EditPage = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   role={role}
+                  roleGroups={roleGroups}
                 />
                 <Box shadow="filterShadow" hasRadius>
                   <Permissions

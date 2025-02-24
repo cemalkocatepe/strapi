@@ -4,12 +4,16 @@ import {
   Field,
   Flex,
   Grid,
+  SingleSelect,
+  SingleSelectOption,
   Textarea,
   TextInput,
   Typography,
 } from '@strapi/design-system';
 import { FormikProps } from 'formik';
 import { useIntl } from 'react-intl';
+
+import { SanitizedAdminRoleGroup } from '../../../../../../../shared/contracts/shared';
 
 import type { AdminRole } from '../../../../../hooks/useAdminRoles';
 import type { EditRoleFormValues } from '../EditPage';
@@ -19,9 +23,18 @@ interface RoleFormProps extends Pick<FormikProps<EditRoleFormValues>, 'values' |
   onChange: FormikProps<EditRoleFormValues>['handleChange'];
   disabled?: boolean;
   role: AdminRole;
+  roleGroups: SanitizedAdminRoleGroup[];
 }
 
-const RoleForm = ({ disabled, role, values, errors, onChange, onBlur }: RoleFormProps) => {
+const RoleForm = ({
+  disabled,
+  role,
+  roleGroups,
+  values,
+  errors,
+  onChange,
+  onBlur,
+}: RoleFormProps) => {
   const { formatMessage } = useIntl();
 
   return (
@@ -84,6 +97,33 @@ const RoleForm = ({ disabled, role, values, errors, onChange, onBlur }: RoleForm
             </Field.Root>
           </Grid.Item>
           <Grid.Item col={6} direction="column" alignItems="stretch">
+            <Field.Root
+              name="role_group"
+              error={errors.role_groups && formatMessage({ id: errors.role_groups })}
+              required
+            >
+              <Field.Label>
+                {formatMessage({
+                  id: 'global.role-groups',
+                  defaultMessage: 'Role Group',
+                })}
+              </Field.Label>
+              <SingleSelect
+                onChange={(value) => {
+                  onChange({ target: { name: 'role_groups', value } });
+                }}
+                value={values.role_groups}
+              >
+                {roleGroups?.map((item) => (
+                  <SingleSelectOption key={item.id} value={item.id}>
+                    {item.name} - [{item.code}]
+                  </SingleSelectOption>
+                ))}
+              </SingleSelect>
+              <Field.Error />
+            </Field.Root>
+          </Grid.Item>
+          <Grid.Item col={12} direction="column" alignItems="stretch">
             <Field.Root
               name="description"
               error={errors.description && formatMessage({ id: errors.description })}

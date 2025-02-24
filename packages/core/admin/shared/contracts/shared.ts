@@ -65,7 +65,7 @@ export interface AdminRoleGroup extends Entity {
 
 export type SanitizedAdminRole = Omit<
   AdminRole,
-  'users' | 'permissions' | 'role_groups' | 'createdAt' | 'updatedAt'
+  'users' | 'permissions' | 'createdAt' | 'updatedAt'
 >;
 
 export type SanitizedAdminRoleGroup = Omit<AdminRoleGroup, 'createdAt' | 'updatedAt'>;

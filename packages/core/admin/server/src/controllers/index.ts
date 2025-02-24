@@ -11,6 +11,7 @@ import user from './user';
 import webhooks from './webhooks';
 import contentApi from './content-api';
 import { createHomepageController } from './homepage';
+import roleGroup from './role-group';
 
 export default {
   admin,
@@ -24,4 +25,5 @@ export default {
   webhooks,
   'content-api': contentApi,
   homepage: createHomepageController,
+  'role-group': roleGroup,
 };

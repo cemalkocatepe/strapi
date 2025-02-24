@@ -5,6 +5,7 @@ const roleCreateSchema = yup
   .shape({
     name: yup.string().min(1).required(),
     description: yup.string().nullable(),
+    role_groups: yup.string().required(),
   })
   .noUnknown();
 
@@ -48,6 +49,7 @@ const roleUpdateSchema = yup
   .shape({
     name: yup.string().min(1),
     description: yup.string().nullable(),
+    role_groups: yup.string().required(),
   })
   .noUnknown();
 
