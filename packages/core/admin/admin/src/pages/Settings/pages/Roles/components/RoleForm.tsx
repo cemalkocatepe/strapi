@@ -113,6 +113,7 @@ const RoleForm = ({
                   onChange({ target: { name: 'role_groups', value } });
                 }}
                 value={values.role_groups}
+                disabled={disabled}
               >
                 {roleGroups?.map((item) => (
                   <SingleSelectOption key={item.id} value={item.id}>
